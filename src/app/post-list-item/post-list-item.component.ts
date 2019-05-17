@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { Post } from '../post';
+import { Post } from '../model/post';
+import { PostService } from '../service/post.service';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -11,18 +13,19 @@ import { Post } from '../post';
 export class PostListItemComponent implements OnInit {
 
     @Input() post: Post;
+    @Input() num: number;
 
-    constructor() { }
+    postSubscription: Subscription;
 
-    ngOnInit() {
-    }
+    constructor(private postService: PostService) { }
+
+    ngOnInit() { }
 
     onAime(val: boolean) {
-      if (val === true) {
-          this.post.loveIts++;
-      } else {
-          this.post.loveIts--;
-      }
+        this.postService.loveIts(this.num, val);
     }
 
+    onDeletePost() {
+        this.postService.removePost(this.num);
+    }
 }
